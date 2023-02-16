@@ -1,0 +1,64 @@
+
+<html>
+<head>
+	<title>OneMap2 XYZ (Default)</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+	<script src="https://cdn.onemap.sg/leaflet/onemap-leaflet.js"></script>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+		}
+		
+		.full-screen {
+			width: 100%;
+			height: 100vh;
+			background-color: #6da7e3;
+		}
+	</style>
+</head>
+<body>
+	<div id='mapdiv' class="full-screen"></div>
+</body>
+<script>
+	// Current screen settings
+	const SCREEN_WIDTH = window.innerWidth;
+	const SCREEN_HEIGHT = window.innerHeight;
+	console.log(SCREEN_WIDTH, SCREEN_HEIGHT)
+
+	var center = L.bounds([1.56073, 104.11475], [1.16, 103.502]).getCenter();
+	var map = L.map('mapdiv').setView([center.x, center.y], 12);
+
+	var basemap = L.tileLayer('https://maps-{s}.onemap.sg/v3/Default/{z}/{x}/{y}.png', {
+		detectRetina: true,
+		maxZoom: 18,
+		minZoom: 11
+	});
+
+	map.setMaxBounds([[1.56073, 104.1147], [1.16, 103.502]]);
+
+	basemap.addTo(map);
+
+	function getLocation() {
+		if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(showPosition);
+		} 
+	}
+
+	function showPosition(position) {           
+		marker = new L.Marker([position.coords.latitude, position.coords.longitude], {bounceOnAdd: false}).addTo(map);             
+		var popup = L.popup()
+		.setLatLng([position.coords.latitude, position.coords.longitude]) 
+		.setContent('You are here!')
+		.openOn(map);         
+	}
+
+
+	var popup = L.popup()
+    .setLatLng([51.513, -0.09])
+    .setContent("I am a standalone popup.")
+    .openOn(map);
+
+</script>
+</html>
+
